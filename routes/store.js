@@ -8,15 +8,16 @@ module.exports = function storeRoutesFactory(app) {
 
   router.get('/stores', readStores);
   router.post('/stores', createStores);
-  router.get('/stores/:sid', updateStore);
+  router.get('/stores/:sid', readStore);
+  router.patch('/stores/:sid', updateStore);
   router.delete('/stores/:sid', removeStore);
 
   function readStores(req, res, next) {
-    Store.find().exec()
-      .then(store => {
-        console.log('store', store);
+    Store.find().sort('-_id').exec()
+      .then(stores => {
+        console.log('store', stores);
 
-        res.json({ data: store });
+        res.json({ data: stores });
       })
       .fail(next);
   }
@@ -33,6 +34,18 @@ module.exports = function storeRoutesFactory(app) {
         res.json({ data: store });
       })
       .fail(next);
+  }
+
+  function readStore(req, res, next) {
+    const { sid } = req.params;
+
+    Store.findById(sid).exec()
+      .then(store => {
+        console.log('store', store);
+        if (!store) { throw newHttpError(404); }
+
+        res.json({ data: store });
+      })
   }
 
   function updateStore(req, res, next) {
