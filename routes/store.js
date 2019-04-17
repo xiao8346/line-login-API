@@ -15,8 +15,6 @@ module.exports = function storeRoutesFactory(app) {
   function readStores(req, res, next) {
     Store.find().sort('-_id').exec()
       .then(stores => {
-        console.log('store', stores);
-
         res.json({ data: stores });
       })
       .fail(next);
@@ -29,8 +27,6 @@ module.exports = function storeRoutesFactory(app) {
 
     return new Store({ name, address, phone, principal }).save()
       .then(store => {
-        console.log('createStores store', store);
-
         res.json({ data: store });
       })
       .fail(next);
@@ -41,7 +37,6 @@ module.exports = function storeRoutesFactory(app) {
 
     Store.findById(sid).exec()
       .then(store => {
-        console.log('store', store);
         if (!store) { throw newHttpError(404); }
 
         res.json({ data: store });
@@ -69,7 +64,7 @@ module.exports = function storeRoutesFactory(app) {
 
   function removeStore(req, res, next) {
     const { sid } = req.params;
-
+    
     Store.findById(sid).exec()
       .then(store => {
         if (!store) { throw new HttpError(404); }
