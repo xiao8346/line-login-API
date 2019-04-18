@@ -54,4 +54,6 @@ app.use(function (err, req, res, next) {
     res.json(err);
 });
 
-app.listen(3300, () => { console.log('listen 3300 port'); })
+const port = process.env.PORT || 3300;
+
+app.listen(port, () => { console.log('listen 3300 port'); })
